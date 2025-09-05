@@ -1,76 +1,86 @@
-let player = document.getElementById("player");
-let item = document.getElementById("item");
-let obstacle = document.getElementById("obstacle");
+const textElement = document.getElementById('game-text');
+const optionsElement = document.getElementById('options-container');
 
-let playerPosition = { x: 20, y: 20 };
-let itemPosition = { x: 200, y: 200 };
-let obstaclePosition = { x: 350, y: 350 };
+// O estado inicial do jogo, pode ter mais coisas como inventário e vida.
+let gameState = {};
 
-let itemCollected = false;
-
-function movePlayer(direction) {
-    switch (direction) {
-        case "up":
-            if (playerPosition.y > 0) playerPosition.y -= 10;
-            break;
-        case "down":
-            if (playerPosition.y < 470) playerPosition.y += 10;
-            break;
-        case "left":
-            if (playerPosition.x > 0) playerPosition.x -= 10;
-            break;
-        case "right":
-            if (playerPosition.x < 470) playerPosition.x += 10;
-            break;
+// As diferentes "cenas" do seu jogo.
+const scenes = {
+    start: {
+        text: 'Você está no início de uma floresta. O que você faz?',
+        options: [
+            { text: 'Entrar na floresta', nextScene: 'path' },
+            { text: 'Voltar para casa', nextScene: 'end' }
+        ]
+    },
+    path: {
+        text: 'Você caminha por uma trilha estreita. Você ouve um barulho. Um coelho pula da moita à sua frente. Que ação você toma?',
+        options: [
+            { text: 'Continuar andando', nextScene: 'continue' },
+            { text: 'Investigar a moita', nextScene: 'bush' }
+        ]
+    },
+    bush: {
+        text: 'Você investiga a moita e encontra uma chave brilhante! Agora você pode abrir a próxima porta do jogo.',
+        options: [
+            { text: 'Pegar a chave e continuar', nextScene: 'continue' }
+        ]
+    },
+    continue: {
+        text: 'Você continua andando e chega em um grande lago.',
+        options: [
+            { text: 'Ir nadar no lago', nextScene: 'lake' },
+            { text: 'Contornar o lago', nextScene: 'around' }
+        ]
+    },
+    lake: {
+        text: 'O lago está gelado, mas você se sente revigorado.',
+        options: [
+            { text: 'Continuar a exploração', nextScene: 'end' }
+        ]
+    },
+    around: {
+        text: 'Você contorna o lago e vê um antigo templo. É aqui que sua jornada termina... por enquanto.',
+        options: [
+            { text: 'Reiniciar o jogo', nextScene: 'start' }
+        ]
+    },
+    end: {
+        text: 'Fim do jogo. Obrigado por jogar!',
+        options: [
+            { text: 'Reiniciar', nextScene: 'start' }
+        ]
     }
+};
 
-    // Atualizar a posição do jogador no HTML
-    player.style.left = playerPosition.x + "px";
-    player.style.top = playerPosition.y + "px";
-
-    checkCollision();
+function startGame() {
+    gameState = {};
+    showScene('start');
 }
 
-function checkCollision() {
-    if (
-        playerPosition.x < itemPosition.x + 30 &&
-        playerPosition.x + 30 > itemPosition.x &&
-        playerPosition.y < itemPosition.y + 30 &&
-        playerPosition.y + 30 > itemPosition.y
-    ) {
-        itemCollected = true;
-        alert("Você coletou o item!");
-        item.style.display = "none"; // Remover item após coleta
+function showScene(sceneName) {
+    const scene = scenes[sceneName];
+    textElement.innerText = scene.text;
+    
+    // Limpar as opções antigas
+    while (optionsElement.firstChild) {
+        optionsElement.removeChild(optionsElement.firstChild);
     }
-
-    if (
-        playerPosition.x < obstaclePosition.x + 30 &&
-        playerPosition.x + 30 > obstaclePosition.x &&
-        playerPosition.y < obstaclePosition.y + 30 &&
-        playerPosition.y + 30 > obstaclePosition.y
-    ) {
-        alert("Você bateu no obstáculo! Jogo perdido.");
-        resetGame();
-    }
+    
+    // Criar os botões de opção
+    scene.options.forEach(option => {
+        const button = document.createElement('button');
+        button.classList.add('option-button');
+        button.innerText = option.text;
+        button.addEventListener('click', () => selectOption(option));
+        optionsElement.appendChild(button);
+    });
 }
 
-function resetGame() {
-    playerPosition = { x: 20, y: 20 };
-    itemCollected = false;
-    player.style.left = playerPosition.x + "px";
-    player.style.top = playerPosition.y + "px";
-    item.style.display = "block"; // Reexibir item
+function selectOption(option) {
+    const nextScene = option.nextScene;
+    showScene(nextScene);
 }
 
-document.addEventListener("keydown", function (event) {
-    if (event.key === "ArrowUp") {
-        movePlayer("up");
-    } else if (event.key === "ArrowDown") {
-        movePlayer("down");
-    } else if (event.key === "ArrowLeft") {
-        movePlayer("left");
-    } else if (event.key === "ArrowRight") {
-        movePlayer("right");
-    }
-});
-
+// Iniciar o jogo quando a página carrega
+startGame();

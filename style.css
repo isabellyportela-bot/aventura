@@ -1,43 +1,55 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #2c3e50;
+    margin: 0;
 }
 
-#game-container {
-    width: 500px;
-    height: 500px;
-    position: relative;
+.game-container {
     background-color: #34495e;
-    border: 2px solid #ecf0f1;
+    border: 2px solid #3498db;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    text-align: center;
 }
 
-.game-object {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+h1 {
+    color: #f1c40f;
 }
 
-#player {
-    background-color: #e74c3c;
-    left: 20px;
-    top: 20px;
+#game-text {
+    background-color: #2c3e50;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    min-height: 100px;
+    text-align: left;
+    white-space: pre-wrap;
 }
 
-#item {
-    background-color: #27ae60;
-    left: 200px;
-    top: 200px;
+#options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-#obstacle {
-    background-color: #f39c12;
-    left: 350px;
-    top: 350px;
+.option-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.option-button:hover {
+    background-color: #2980b9;
 }
