@@ -1,80 +1,76 @@
-let step = 0;
-let path = [];
+let player = document.getElementById("player");
+let item = document.getElementById("item");
+let obstacle = document.getElementById("obstacle");
 
-function makeChoice(choice) {
-    const description = document.getElementById("description");
-    const choices = document.getElementById("choices");
-   
-    // Salva a escolha para futuras decisões
-    path.push(choice);
+let playerPosition = { x: 20, y: 20 };
+let itemPosition = { x: 200, y: 200 };
+let obstaclePosition = { x: 350, y: 350 };
 
-    if (step === 0) {
-        if (choice === 'explorar') {
-            description.textContent = "Você começa a explorar a sala de servidores, repleta de computadores antigos e telas piscando. Um arquivo corrompido chama sua atenção.";
-            choices.innerHTML = `
-                <button onclick="makeChoice('corrigir')">Tentar corrigir o arquivo</button>
-                <button onclick="makeChoice('seguir')">Ignorar o arquivo e seguir em frente</button>
-            `;
-        } else if (choice === 'tela') {
-            description.textContent = "A tela à sua frente começa a mostrar mensagens criptografadas. Você consegue entender algumas palavras: 'A Entidade observa.'";
-            choices.innerHTML = `
-                <button onclick="makeChoice('falar')">Tentar falar com a Entidade</button>
-                <button onclick="makeChoice('ignorar')">Ignorar e seguir em frente</button>
-            `;
-        } else if (choice === 'voz') {
-            description.textContent = "Você ouve uma voz suave que sussurra em seus ouvidos: 'Você não está sozinho aqui.' A voz parece familiar.";
-            choices.innerHTML = `
-                <button onclick="makeChoice('confiar')">Confiar na voz e seguir suas instruções</button>
-                <button onclick="makeChoice('desconfiar')">Desconfiar e se afastar da voz</button>
-            `;
-        }
-    } else if (step === 1) {
-        if (choice === 'corrigir') {
-            description.textContent = "Você tenta corrigir o arquivo, mas algo estranho acontece. O código se espalha pelo ambiente e tudo começa a distorcer. O sistema parece estar ganhando vida!";
-            choices.innerHTML = `
-                <button onclick="makeChoice('confrontar')">Confrontar a distorção</button>
-                <button onclick="makeChoice('fugir')">Fugir do código distorcido</button>
-            `;
-        } else if (choice === 'seguir') {
-            description.textContent = "Você segue em frente, ignorando o arquivo corrompido. Porém, algo começa a desmoronar ao seu redor. O sistema está se desfazendo.";
-            choices.innerHTML = `
-                <button onclick="makeChoice('explorar')">Voltar e tentar corrigir o arquivo</button>
-                <button onclick="makeChoice('fugir')">Fugir da sala de servidores</button>
-            `;
-        } else if (choice === 'falar') {
-            description.textContent = "Você tenta se comunicar com a Entidade, mas ela responde de forma enigmática: 'A resposta está no código. Você deve escolher.'";
-            choices.innerHTML = `
-                <button onclick="makeChoice('escolher')">Fazer uma escolha definitiva</button>
-                <button onclick="makeChoice('ignorar')">Ignorar a Entidade e continuar sozinho</button>
-            `;
-        } else if (choice === 'ignorar') {
-            description.textContent = "Você decide ignorar a tela e continuar. A escuridão ao seu redor se torna mais opressiva, e você começa a perder a sensação de tempo.";
-            choices.innerHTML = `
-                <button onclick="makeChoice('confiar')">Confiar em sua intuição e seguir em frente</button>
-                <button onclick="makeChoice('desconfiar')">Desconfiar e procurar uma saída</button>
-            `;
-        } else if (choice === 'confiar') {
-            description.textContent = "Você decide confiar na voz e seguir suas instruções. A voz guia você a uma sala secreta onde um grande mistério é revelado.";
-            choices.innerHTML = `<button onclick="restartGame()">Recomeçar a jornada</button>`;
-        } else if (choice === 'desconfiar') {
-            description.textContent = "Você decide ignorar a voz e sair da sala. Mas algo estava errado. O sistema começa a se corromper mais rápido e você fica preso.";
-            choices.innerHTML = `<button onclick="restartGame()">Recomeçar a jornada</button>`;
-        }
+let itemCollected = false;
+
+function movePlayer(direction) {
+    switch (direction) {
+        case "up":
+            if (playerPosition.y > 0) playerPosition.y -= 10;
+            break;
+        case "down":
+            if (playerPosition.y < 470) playerPosition.y += 10;
+            break;
+        case "left":
+            if (playerPosition.x > 0) playerPosition.x -= 10;
+            break;
+        case "right":
+            if (playerPosition.x < 470) playerPosition.x += 10;
+            break;
     }
-    step++;
+
+    // Atualizar a posição do jogador no HTML
+    player.style.left = playerPosition.x + "px";
+    player.style.top = playerPosition.y + "px";
+
+    checkCollision();
 }
 
-function restartGame() {
-    const description = document.getElementById("description");
-    const choices = document.getElementById("choices");
+function checkCollision() {
+    if (
+        playerPosition.x < itemPosition.x + 30 &&
+        playerPosition.x + 30 > itemPosition.x &&
+        playerPosition.y < itemPosition.y + 30 &&
+        playerPosition.y + 30 > itemPosition.y
+    ) {
+        itemCollected = true;
+        alert("Você coletou o item!");
+        item.style.display = "none"; // Remover item após coleta
+    }
 
-    description.textContent = "Você acorda em um mundo digital desconhecido. O que você fará?";
-    choices.innerHTML = `
-        <button onclick="makeChoice('explorar')">Explorar a sala de servidores</button>
-        <button onclick="makeChoice('tela')">Interagir com a tela misteriosa</button>
-        <button onclick="makeChoice('voz')">Ouvir a voz misteriosa</button>
-    `;
-    step = 0;
-    path = [];
+    if (
+        playerPosition.x < obstaclePosition.x + 30 &&
+        playerPosition.x + 30 > obstaclePosition.x &&
+        playerPosition.y < obstaclePosition.y + 30 &&
+        playerPosition.y + 30 > obstaclePosition.y
+    ) {
+        alert("Você bateu no obstáculo! Jogo perdido.");
+        resetGame();
+    }
 }
+
+function resetGame() {
+    playerPosition = { x: 20, y: 20 };
+    itemCollected = false;
+    player.style.left = playerPosition.x + "px";
+    player.style.top = playerPosition.y + "px";
+    item.style.display = "block"; // Reexibir item
+}
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "ArrowUp") {
+        movePlayer("up");
+    } else if (event.key === "ArrowDown") {
+        movePlayer("down");
+    } else if (event.key === "ArrowLeft") {
+        movePlayer("left");
+    } else if (event.key === "ArrowRight") {
+        movePlayer("right");
+    }
+});
 

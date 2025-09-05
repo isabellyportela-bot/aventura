@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O Enigma Digital</title>
+    <title>Jogo de Aventura</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <h1>O Enigma Digital</h1>
-        <p id="description">Você acorda em um mundo digital desconhecido. O que você fará?</p>
-        <div id="choices">
-            <button onclick="makeChoice('explorar')">Explorar a sala de servidores</button>
-            <button onclick="makeChoice('tela')">Interagir com a tela misteriosa</button>
-            <button onclick="makeChoice('voz')">Ouvir a voz misteriosa</button>
-        </div>
+        <div id="player" class="game-object"></div>
+        <div id="item" class="game-object"></div>
+        <div id="obstacle" class="game-object"></div>
     </div>
 
     <script src="script.js"></script>

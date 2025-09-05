@@ -1,59 +1,43 @@
-/* Resetando o estilo padrão */
-* {
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #121212;
-    color: #e0e0e0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    text-align: center;
-    overflow: hidden;
+    background-color: #2c3e50;
 }
 
 #game-container {
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    padding: 30px;
-    width: 400px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    width: 500px;
+    height: 500px;
+    position: relative;
+    background-color: #34495e;
+    border: 2px solid #ecf0f1;
 }
 
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #66bb6a;
+.game-object {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
 
-#description {
-    font-size: 1.2em;
-    margin-bottom: 30px;
-    color: #ddd;
+#player {
+    background-color: #e74c3c;
+    left: 20px;
+    top: 20px;
 }
 
-button {
-    margin: 10px;
-    padding: 12px 20px;
-    font-size: 1.1em;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+#item {
+    background-color: #27ae60;
+    left: 200px;
+    top: 200px;
 }
 
-button:hover {
-    background-color: #444;
+#obstacle {
+    background-color: #f39c12;
+    left: 350px;
+    top: 350px;
 }
-
-button:active {
-    background-color: #555;
-}
-
